@@ -13,7 +13,9 @@
     "axios-retry": "^3.1.9",
     "next": "11.1.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "sass": "^1.41.1",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/react": "17.0.21",

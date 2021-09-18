@@ -1,40 +1,33 @@
+import winston from 'winston'
 import Head from 'next/head'
-import { fetchItemsList } from '../clients/xivClient'
+import { getFirstPage } from '../services/itemsService'
+import { ItemsList } from '../components/organisms'
 
-const ItemRow = ({ item }) => (
-  <picture>
-    <img src={item['Icon']} />
-    <figcaption>{item['Name']}</figcaption>
-  </picture>
-)
+const log = winston.createLogger({ format: winston.format.json() })
+interface ItemsPageProps {
+  itemsPage: ItemsPage,
+}
 
-const ItemsList = ({ items }) => (
-  <div>
-    {items.map((item) => <ItemRow key={item['ID']} item={item} />)}
-  </div>
-)
-
-const Items = ({ itemsList }) => {
+const Items = ({ itemsPage }: ItemsPageProps) => {
   return (
     <div>
       <Head>
         <title>Items</title>
       </Head>
-      <ItemsList items={itemsList["Results"]} />
+      <ItemsList items={itemsPage.results} />
     </div>
   )
 }
 
 export const getServerSideProps = async ({ res }) => {
   try {
-    const itemsList = await fetchItemsList()
-    console.log(itemsList)
+    const itemsPage = await getFirstPage()
 
     return {
-      props: { itemsList },
+      props: { itemsPage },
     }
   } catch (err) {
-    console.log(err)
+    log.error(err)
     res.status = 502
 
     return {
